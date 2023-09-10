@@ -3,12 +3,11 @@ import pandas as pd
 import os
 from datetime import datetime
 import requests
+import numpy as np  # Import numpy if you're using it in your code
 
 # Base directory where the CSV files are stored.
 # This assumes that the data folders are in the same directory as your script.
 base_dir = os.path.abspath(os.path.dirname(__file__))
-
-import matplotlib.pyplot as plt  # Import matplotlib here
 
 def load_data(league, season):
     base_url = "https://raw.githubusercontent.com/NathanLever7/Football_Explosiveness_Dashboard/main/"
@@ -36,22 +35,12 @@ season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])  # Add ot
 # Load the data for the selected league and season
 team_explosiveness = load_data(league, season)
 
-# Display the chart
-st.header('Team Explosiveness')
-fig, ax = plt.subplots(figsize=(8, 6))
+# Create your matplotlib figure and plot your data
+arr = np.random.normal(1, 1, size=100)
+fig, ax = plt.subplots()
+ax.hist(arr, bins=20)
 
-# Reverse the DataFrame to maintain the original order
-team_explosiveness = team_explosiveness[::-1]
-
-# Plot horizontal bars
-ax.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'])
-
-# Set axis labels and title
-ax.set_xlabel('Team Explosiveness Index')
-ax.set_ylabel('Team Name')
-ax.set_title('Team Explosiveness')
-
-# Display the chart in Streamlit
+# Display the chart using st.pyplot()
 st.pyplot(fig)
 
 # Display last updated date and time
