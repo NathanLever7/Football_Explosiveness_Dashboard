@@ -19,7 +19,7 @@ def load_data(league, season, data_type):
     return data_df
 
 # Streamlit UI
-st.title('Football Analysis Dashboard')
+st.title('Explosiveness vs Consistency')
 
 # Let users select a league and season
 league = st.sidebar.selectbox('Select League', ['Premier League'])  
