@@ -76,6 +76,7 @@ st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
 
 
 st.markdown("""**Player Explanation:**
+
 Not all xG is made equal.
 
 Let's take 2 players in a match, players A and B. Let's say A has 1 shot of 1 xG, and B has 10 shots of 0.1 xG. Both have an xG of 1. However, the chances that both score 1 goal are different. A is guaranteed to score 1 goal, but B could score anywhere between 0-10 goals.
@@ -88,6 +89,7 @@ In both cases, we expect players that score highly, to score goals often. Explos
 
 
 st.markdown("""**Team Explanation:**
+
 Team explosiveness orders the teams who take a lot of shots and generate high xG. They are the teams likely to score many goals in a given game.
 
 In contrast, the opposition data shows the teams that concede a lot of shots, and high xG. They are the teams likely to concede many goals in a given game.""")
