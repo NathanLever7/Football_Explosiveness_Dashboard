@@ -38,30 +38,27 @@ team_explosiveness = load_data(league, season)
 # Remove the first row (Brighton) from the DataFrame
 team_explosiveness = team_explosiveness.iloc[1:]
 
-# Convert the "Team Explosiveness Index" column to numeric
-team_explosiveness['Team Explosiveness Index'] = pd.to_numeric(team_explosiveness['Team Explosiveness Index'])
-
 # Create your matplotlib figure and plot your data
 fig, ax = plt.subplots(figsize=(8, 6))
-
-# Normalize the data for the x-axis to have a consistent scale
-min_index = team_explosiveness['Team Explosiveness Index'].min()
-max_index = team_explosiveness['Team Explosiveness Index'].max()
-normalized_values = (team_explosiveness['Team Explosiveness Index'] - min_index) / (max_index - min_index)
 
 # Reverse the DataFrame to maintain the original order
 team_explosiveness = team_explosiveness[::-1]
 
-# Plot horizontal bars with normalized x-axis values
-ax.barh(team_explosiveness['Squad'], normalized_values)
+# Plot horizontal bars with real x-axis values
+ax.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'])
 
 # Set axis labels and title
-ax.set_xlabel('Normalized Team Explosiveness Index')
+ax.set_xlabel('Team Explosiveness Index')
 ax.set_ylabel('Team Name')
 ax.set_title('Team Explosiveness')
+
+# Set x-axis limits based on the maximum value in the data
+max_index = team_explosiveness['Team Explosiveness Index'].max()
+ax.set_xlim(0, max_index + 5)  # Add a buffer of 5 for better visualization
 
 # Display the chart in Streamlit
 st.pyplot(fig)
 
 # Display last updated date and time
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+
