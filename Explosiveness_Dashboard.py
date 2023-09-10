@@ -3,7 +3,8 @@ import pandas as pd
 import os
 from datetime import datetime
 import requests
-import numpy as np  # Import numpy if you're using it in your code
+import numpy as np
+import matplotlib.pyplot as plt  # Import matplotlib.pyplot
 
 # Base directory where the CSV files are stored.
 # This assumes that the data folders are in the same directory as your script.
