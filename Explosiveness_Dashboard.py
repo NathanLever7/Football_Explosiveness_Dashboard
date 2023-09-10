@@ -40,19 +40,4 @@ team_explosiveness = load_data(league, season)
 st.header('Team Explosiveness')
 fig, ax = plt.subplots(figsize=(8, 6))
 
-# Reverse the DataFrame to maintain the original order
-team_explosiveness = team_explosiveness[::-1]
-
-# Plot horizontal bars
-ax.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'])
-
-# Set axis labels and title
-ax.set_xlabel('Team Explosiveness Index')
-ax.set_ylabel('Team Name')
-ax.set_title('Team Explosiveness')
-
-# Display the chart in Streamlit
-st.pyplot(fig)
-
-# Display last updated date and time
-st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+print(team_explosiveness)
