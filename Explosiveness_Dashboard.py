@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 import requests
 import matplotlib.pyplot as plt
+from matplotlib import colors
 
 # Base directory where the CSV files are stored.
 # This assumes that the data folders are in the same directory as your script.
