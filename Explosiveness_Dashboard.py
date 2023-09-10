@@ -38,14 +38,13 @@ team_explosiveness = load_data(league, season)
 # Remove the first row from the DataFrame
 team_explosiveness = team_explosiveness.iloc[1:]
 
-  # Plotting
-        plt.figure(figsize=(12, 8))
-        plt.barh(df_explosiveness['Squad'], df_explosiveness['Team Explosiveness Index'], color='purple')
-        plt.xlabel('Team Explosiveness Index')
-        plt.ylabel('Team')
-        plt.title(f'{analysis_type} Explosiveness Index {league} {season}')
-        plt.gca().invert_yaxis()
-        plt.show()
+plt.figure(figsize=(12, 8))
+plt.barh(df_explosiveness['Squad'], df_explosiveness['Team Explosiveness Index'], color='purple')
+plt.xlabel('Team Explosiveness Index')
+plt.ylabel('Team')
+plt.title(f'{analysis_type} Explosiveness Index {league} {season}')
+plt.gca().invert_yaxis()
+plt.show()
 
 
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
