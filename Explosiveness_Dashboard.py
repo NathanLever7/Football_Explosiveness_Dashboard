@@ -22,7 +22,7 @@ def load_data(league, season):
         encoding='utf-8-sig',
         names=['Squad', 'Team Explosiveness Index']  # Replace with actual column names
     )
-    
+    team_explosiveness['Team Explosiveness Index'] = pd.to_numeric(team_explosiveness['Team Explosiveness Index'], errors='coerce')
     return team_explosiveness
 
 # Streamlit UI
