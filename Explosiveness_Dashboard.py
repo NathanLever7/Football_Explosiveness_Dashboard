@@ -38,10 +38,16 @@ team_explosiveness = load_data(league, season)
 # Remove the first row from the DataFrame
 team_explosiveness = team_explosiveness.iloc[1:]
 
-# ... (previous parts of your script)
+# Convert 'Team Explosiveness Index' to numeric
+team_explosiveness['Team Explosiveness Index'] = pd.to_numeric(team_explosiveness['Team Explosiveness Index'], errors='coerce')
+
+# Create a colormap
+norm = colors.Normalize(vmin=team_explosiveness['Team Explosiveness Index'].min(), vmax=team_explosiveness['Team Explosiveness Index'].max())
+cmap = plt.cm.get_cmap("coolwarm")
+color_values = cmap(norm(team_explosiveness['Team Explosiveness Index'].values))
 
 plt.figure(figsize=(12, 8))
-plt.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'], color='purple')
+plt.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'], color=color_values)
 plt.xlabel('Team Explosiveness Index')
 plt.ylabel('Team')
 plt.title(f'Team Explosiveness Index {league} {season}')
@@ -51,3 +57,4 @@ plt.gca().invert_yaxis()
 st.pyplot(plt.gcf())
 
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+
