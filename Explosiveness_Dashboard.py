@@ -40,9 +40,10 @@ team_explosiveness, opposition_explosiveness, player_explosiveness, player_effic
 
 # Display horizontal bar chart for team explosiveness
 st.header('Team Explosiveness')
-
-# Create a horizontal bar chart with team names on the y-axis and explosiveness values on the x-axis
-st.bar_chart(team_explosiveness.set_index('Team Name')['Explosiveness'], use_container_width=True)
+# Set the DataFrame index to 'Squad' to use it for the y-axis labels
+team_explosiveness.set_index('Squad', inplace=True)
+# Create a horizontal bar chart
+st.bar_chart(team_explosiveness['Team Explosiveness Index'])
 
 # Display last updated date and time
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
