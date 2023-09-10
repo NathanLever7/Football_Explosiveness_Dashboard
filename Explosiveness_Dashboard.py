@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
-from datetime import datetime
+from datetime import datetime  # Import the datetime module
 
 # Base directory where the CSV files are stored.
 # This assumes that the data folders are in the same directory as your script.
@@ -16,17 +16,15 @@ def load_data(league, season):
     
     # Load data from GitHub using raw file URLs
     team_explosiveness_url = f"{base_url}{season_dir}Team_Explosiveness.csv"
-    opposition_explosiveness_url = f"{base_url}{season_dir}Opposition_Explosiveness.csv"
-    player_explosiveness_url = f"{base_url}{season_dir}Player_Explosiveness.csv"
-    player_efficiency_url = f"{base_url}{season_dir}Player_Efficiency.csv"
     
-    # Fetch data using requests
-    team_explosiveness = pd.read_csv(team_explosiveness_url, encoding='utf-8-sig')
-    opposition_explosiveness = pd.read_csv(opposition_explosiveness_url, encoding='utf-8-sig')
-    player_explosiveness = pd.read_csv(player_explosiveness_url, encoding='utf-8-sig')
-    player_efficiency = pd.read_csv(player_efficiency_url, encoding='utf-8-sig')
+    # Explicitly set column names when reading the CSV
+    team_explosiveness = pd.read_csv(
+        team_explosiveness_url,
+        encoding='utf-8-sig',
+        names=['Squad', 'Team Explosiveness Index']  # Replace with actual column names
+    )
     
-    return team_explosiveness, opposition_explosiveness, player_explosiveness, player_efficiency
+    return team_explosiveness
 
 # Streamlit UI
 st.title('Football Analysis Dashboard')
@@ -36,7 +34,7 @@ league = st.sidebar.selectbox('Select League', ['Premier League'])  # Add other 
 season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])  # Add other seasons to the list as needed
 
 # Load the data for the selected league and season
-team_explosiveness, opposition_explosiveness, player_explosiveness, player_efficiency = load_data(league, season)
+team_explosiveness = load_data(league, season)
 
 # Display horizontal bar chart for team explosiveness
 st.header('Team Explosiveness')
@@ -47,3 +45,4 @@ st.bar_chart(team_explosiveness['Team Explosiveness Index'])
 
 # Display last updated date and time
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+
