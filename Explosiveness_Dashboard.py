@@ -21,6 +21,8 @@ def load_data(league, season, data_type):
 # Streamlit UI
 st.title('Explosiveness vs Consistency')
 
+st.write("Skip to the bottom for metric explanation")
+
 # Let users select a league and season
 league = st.sidebar.selectbox('Select League', ['Premier League'])  
 season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])  
