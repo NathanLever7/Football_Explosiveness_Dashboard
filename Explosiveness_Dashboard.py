@@ -86,13 +86,16 @@ Players who take many shots, and have a high npxG per 90 tend will have high exp
 
 In both cases, we expect players that score highly, to score goals often. Explosive players are more likely to have greater variance in goals per game than consistent players.""")
 
+
 st.markdown("""**Team Explanation:**
 Team explosiveness orders the teams who take a lot of shots and generate high xG. They are the teams likely to score many goals in a given game.
 
 In contrast, the opposition data shows the teams that concede a lot of shots, and high xG. They are the teams likely to concede many goals in a given game.""")
 
 
+
 st.markdown("""**Key Definitions:**
+
 xG = Expected Goals
 
 np = Non-penalty
