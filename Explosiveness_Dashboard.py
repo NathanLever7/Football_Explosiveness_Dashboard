@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 import os
-from datetime import datetime  # Import the datetime module
-import matplotlib.pyplot as plt
+from datetime import datetime
+import importlib  # Import the importlib module for checking the environment
 
 # Base directory where the CSV files are stored.
 # This assumes that the data folders are in the same directory as your script.
@@ -18,10 +18,11 @@ def load_data(league, season):
     # Load data from GitHub using raw file URLs
     team_explosiveness_url = f"{base_url}{season_dir}Team_Explosiveness.csv"
     
-    # Load the data using pandas, assuming the CSV file contains column names
+    # Explicitly set column names when reading the CSV
     team_explosiveness = pd.read_csv(
         team_explosiveness_url,
-        encoding='utf-8-sig'
+        encoding='utf-8-sig',
+        names=['Squad', 'Team Explosiveness Index']  # Replace with actual column names
     )
     
     return team_explosiveness
@@ -33,30 +34,32 @@ st.title('Football Analysis Dashboard')
 league = st.sidebar.selectbox('Select League', ['Premier League'])  # Add other leagues to the list as needed
 season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])  # Add other seasons to the list as needed
 
-# Load the data for the selected league and season
-team_explosiveness = load_data(league, season)
+# Check if matplotlib is installed
+try:
+    importlib.import_module('matplotlib')
+except ImportError:
+    st.error('Matplotlib is not installed. Please install it using `pip install matplotlib`.')
+else:
+    # Matplotlib is installed, load the data and display the chart
+    team_explosiveness = load_data(league, season)
 
-# Display the chart
-st.header('Team Explosiveness')
+    # Display the chart
+    st.header('Team Explosiveness')
+    fig, ax = plt.subplots(figsize=(8, 6))
 
-# Create the horizontal bar chart
-fig, ax = plt.subplots(figsize=(8, 6))
+    # Reverse the DataFrame to maintain the original order
+    team_explosiveness = team_explosiveness[::-1]
 
-# Reverse the DataFrame to maintain the original order
-team_explosiveness = team_explosiveness[::-1]
+    # Plot horizontal bars
+    ax.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'])
 
-# Plot horizontal bars
-ax.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'])
+    # Set axis labels and title
+    ax.set_xlabel('Team Explosiveness Index')
+    ax.set_ylabel('Team Name')
+    ax.set_title('Team Explosiveness')
 
-# Set axis labels and title
-ax.set_xlabel('Team Explosiveness Index')
-ax.set_ylabel('Team Name')
-ax.set_title('Team Explosiveness')
-
-# Display the chart in Streamlit
-st.pyplot(fig)
+    # Display the chart in Streamlit
+    st.pyplot(fig)
 
 # Display last updated date and time
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
-
-
