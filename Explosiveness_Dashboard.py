@@ -18,11 +18,10 @@ def load_data(league, season):
     # Load data from GitHub using raw file URLs
     team_explosiveness_url = f"{base_url}{season_dir}Team_Explosiveness.csv"
     
-    # Explicitly set column names when reading the CSV
+    # Load the data using pandas, assuming the CSV file contains column names
     team_explosiveness = pd.read_csv(
         team_explosiveness_url,
-        encoding='utf-8-sig',
-        names=['Squad', 'Team Explosiveness Index']  # Replace with actual column names
+        encoding='utf-8-sig'
     )
     
     return team_explosiveness
@@ -39,6 +38,8 @@ team_explosiveness = load_data(league, season)
 
 # Display the chart
 st.header('Team Explosiveness')
+
+# Create the horizontal bar chart
 fig, ax = plt.subplots(figsize=(8, 6))
 
 # Reverse the DataFrame to maintain the original order
@@ -57,4 +58,5 @@ st.pyplot(fig)
 
 # Display last updated date and time
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+
 
