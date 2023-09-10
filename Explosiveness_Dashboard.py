@@ -38,13 +38,16 @@ team_explosiveness = load_data(league, season)
 # Remove the first row from the DataFrame
 team_explosiveness = team_explosiveness.iloc[1:]
 
+# ... (previous parts of your script)
+
 plt.figure(figsize=(12, 8))
 plt.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'], color='purple')
 plt.xlabel('Team Explosiveness Index')
 plt.ylabel('Team')
-plt.title(f'Team Explosiveness Index')
+plt.title(f'Team Explosiveness Index {league} {season}')
 plt.gca().invert_yaxis()
-plt.show()
 
+# Display the plot in the Streamlit application
+st.pyplot(plt.gcf())
 
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
