@@ -39,7 +39,7 @@ team_explosiveness = load_data(league, season)
 team_explosiveness = team_explosiveness.iloc[1:]
 
 plt.figure(figsize=(12, 8))
-plt.barh(df_explosiveness['Squad'], df_explosiveness['Team Explosiveness Index'], color='purple')
+plt.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'], color='purple')
 plt.xlabel('Team Explosiveness Index')
 plt.ylabel('Team')
 plt.title(f'{analysis_type} Explosiveness Index {league} {season}')
