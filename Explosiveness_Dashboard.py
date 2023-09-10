@@ -42,7 +42,7 @@ plt.figure(figsize=(12, 8))
 plt.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'], color='purple')
 plt.xlabel('Team Explosiveness Index')
 plt.ylabel('Team')
-plt.title(f'{analysis_type} Explosiveness Index {league} {season}')
+plt.title(f'Team Explosiveness Index')
 plt.gca().invert_yaxis()
 plt.show()
 
