@@ -35,30 +35,17 @@ season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])  # Add ot
 # Load the data for the selected league and season
 team_explosiveness = load_data(league, season)
 
-# Remove the first row (Brighton) from the DataFrame
+# Remove the first row from the DataFrame
 team_explosiveness = team_explosiveness.iloc[1:]
 
-# Create your matplotlib figure and plot your data
-fig, ax = plt.subplots(figsize=(8, 6))
+  # Plotting
+        plt.figure(figsize=(12, 8))
+        plt.barh(df_explosiveness['Squad'], df_explosiveness['Team Explosiveness Index'], color='purple')
+        plt.xlabel('Team Explosiveness Index')
+        plt.ylabel('Team')
+        plt.title(f'{analysis_type} Explosiveness Index {league} {season}')
+        plt.gca().invert_yaxis()
+        plt.show()
 
-# Reverse the DataFrame to maintain the original order
-team_explosiveness = team_explosiveness[::-1]
 
-# Plot horizontal bars with real x-axis values
-ax.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'])
-
-# Set axis labels and title
-ax.set_xlabel('Team Explosiveness Index')
-ax.set_ylabel('Team Name')
-ax.set_title('Team Explosiveness')
-
-# Convert max_index to a numeric type and set x-axis limits
-max_index = team_explosiveness['Team Explosiveness Index'].max()
-max_index = float(max_index)  # Convert to float
-ax.set_xlim(0, max_index + 5)  # Add a buffer of 5 for better visualization
-
-# Display the chart in Streamlit
-st.pyplot(fig)
-
-# Display last updated date and time
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
