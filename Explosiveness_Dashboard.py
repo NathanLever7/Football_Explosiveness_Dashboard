@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 # Base directory where the CSV files are stored
-base_dir = "C:\\Users\\natha\\Documents\\Football\\Explosiveness Seasons"
+base_dir = "C:\\Users\\natha\\Documents\\Football\\Explosiveness"
 
 # Function to load data for a selected league and season
 def load_data(league, season):
@@ -29,4 +29,3 @@ st.header('Team Explosiveness')
 st.write(team_explosiveness)
 
 # ... (add more Streamlit elements to display other data and create visualizations)
-
