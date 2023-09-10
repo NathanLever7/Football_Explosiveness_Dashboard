@@ -94,6 +94,8 @@ In contrast, the opposition data shows the teams that concede a lot of shots, an
 
 st.markdown("""**Key Definitions:**
 xG = Expected Goals
+
 np = Non-penalty
+
 Sh = Shots""")
 
