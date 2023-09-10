@@ -38,6 +38,9 @@ team_explosiveness = load_data(league, season)
 # Remove the first row (Brighton) from the DataFrame
 team_explosiveness = team_explosiveness.iloc[1:]
 
+# Convert the "Team Explosiveness Index" column to numeric
+team_explosiveness['Team Explosiveness Index'] = pd.to_numeric(team_explosiveness['Team Explosiveness Index'])
+
 # Create your matplotlib figure and plot your data
 fig, ax = plt.subplots(figsize=(8, 6))
 
