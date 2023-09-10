@@ -38,7 +38,5 @@ season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])  # Add ot
 # Load the data for the selected league and season
 team_explosiveness, opposition_explosiveness, player_explosiveness, player_efficiency = load_data(league, season)
 
-
-
 # Display last updated date and time
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
