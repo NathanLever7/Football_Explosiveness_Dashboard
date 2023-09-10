@@ -34,7 +34,13 @@ def plot_data(explosiveness_data, league, season, analysis_type):
 
     # Create a colormap
     norm = colors.Normalize(vmin=explosiveness_data[f'{analysis_type} Explosiveness Index'].min(), vmax=explosiveness_data[f'{analysis_type} Explosiveness Index'].max())
-    cmap = plt.cm.get_cmap("coolwarm")
+    
+    # Choose a different colormap for the opposition data
+    if analysis_type == "Opposition":
+        cmap = plt.cm.get_cmap("coolwarm_r")  # '_r' stands for reversed colormap
+    else:
+        cmap = plt.cm.get_cmap("coolwarm")
+    
     color_values = cmap(norm(explosiveness_data[f'{analysis_type} Explosiveness Index'].values))
 
     plt.figure(figsize=(12, 8))
@@ -46,6 +52,7 @@ def plot_data(explosiveness_data, league, season, analysis_type):
 
     # Display the plot in the Streamlit application
     st.pyplot(plt.gcf())
+
 
 # Streamlit UI
 st.title('Football Analysis Dashboard')
