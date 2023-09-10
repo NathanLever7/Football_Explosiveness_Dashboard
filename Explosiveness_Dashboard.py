@@ -4,7 +4,11 @@ import os
 from datetime import datetime
 
 # Base directory where the CSV files are stored.
+# This assumes that the data folders are in the same directory as your script.
 base_dir = os.path.abspath(os.path.dirname(__file__))
+
+import pandas as pd
+import requests
 
 def load_data(league, season):
     base_url = "https://raw.githubusercontent.com/NathanLever7/Football_Explosiveness_Dashboard/main/"
@@ -12,33 +16,34 @@ def load_data(league, season):
     
     # Load data from GitHub using raw file URLs
     team_explosiveness_url = f"{base_url}{season_dir}Team_Explosiveness.csv"
-    
-    # Debugging: Check the URL
-    st.write(f'Team explosiveness URL: {team_explosiveness_url}')
+    opposition_explosiveness_url = f"{base_url}{season_dir}Opposition_Explosiveness.csv"
+    player_explosiveness_url = f"{base_url}{season_dir}Player_Explosiveness.csv"
+    player_efficiency_url = f"{base_url}{season_dir}Player_Efficiency.csv"
     
     # Fetch data using requests
     team_explosiveness = pd.read_csv(team_explosiveness_url, encoding='utf-8-sig')
+    opposition_explosiveness = pd.read_csv(opposition_explosiveness_url, encoding='utf-8-sig')
+    player_explosiveness = pd.read_csv(player_explosiveness_url, encoding='utf-8-sig')
+    player_efficiency = pd.read_csv(player_efficiency_url, encoding='utf-8-sig')
     
-    # Debugging: Display the DataFrame
-    st.write('Team explosiveness DataFrame:', team_explosiveness)
-    
-    return team_explosiveness
+    return team_explosiveness, opposition_explosiveness, player_explosiveness, player_efficiency
 
 # Streamlit UI
 st.title('Football Analysis Dashboard')
 
 # Let users select a league and season
-league = st.sidebar.selectbox('Select League', ['Premier League'])
-season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])
+league = st.sidebar.selectbox('Select League', ['Premier League'])  # Add other leagues to the list as needed
+season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])  # Add other seasons to the list as needed
 
 # Load the data for the selected league and season
-team_explosiveness = load_data(league, season)
+team_explosiveness, opposition_explosiveness, player_explosiveness, player_efficiency = load_data(league, season)
 
-# Debugging: Check the columns of the DataFrame
-st.write('Columns:', team_explosiveness.columns)
+# Display horizontal bar chart for team explosiveness
+st.header('Team Explosiveness')
+# Set the DataFrame index to 'Squad' to use it for the y-axis labels
+team_explosiveness.set_index('Squad', inplace=True)
+# Create a horizontal bar chart
+st.bar_chart(team_explosiveness['Team Explosiveness Index'])
 
 # Display last updated date and time
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
-
-
-
