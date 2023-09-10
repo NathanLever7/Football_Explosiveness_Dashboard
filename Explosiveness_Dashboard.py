@@ -13,6 +13,11 @@ import requests
 def load_data(league, season):
     base_url = "https://raw.githubusercontent.com/NathanLever7/Football_Explosiveness_Dashboard/main/"
     season_dir = f'{league.replace(" ", "_")}_{season.replace("/", "_")}/'
+
+    # Debugging: Check the values of season_dir and team_explosiveness_url
+    st.write(f'season_dir: {season_dir}')
+    st.write(f'team_explosiveness_url: {team_explosiveness_url}')
+
     
     # Load data from GitHub using raw file URLs
     team_explosiveness_url = f"{base_url}{season_dir}Team_Explosiveness.csv"
@@ -37,8 +42,6 @@ season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])  # Add ot
 
 # Load the data for the selected league and season
 team_explosiveness, opposition_explosiveness, player_explosiveness, player_efficiency = load_data(league, season)
-
-st.write(team_explosiveness.columns)
 
 
 # Display last updated date and time
