@@ -39,10 +39,7 @@ team_explosiveness = load_data(league, season)
 # Create your matplotlib figure and plot your data
 arr = np.random.normal(1, 1, size=100)
 fig, ax = plt.subplots()
-ax.hist(arr, bins=20)
-
-# Set the x-axis range to be between 0 and 50
-ax.set_xlim(0, 50)
+ax.hist(arr, bins=20, range=(0, 50))  # Set a fixed range for the x-axis
 
 # Display the chart using st.pyplot()
 st.pyplot(fig)
