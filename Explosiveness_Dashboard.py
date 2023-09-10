@@ -28,8 +28,19 @@ league = st.sidebar.selectbox('Select League', ['Premier League'])
 season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])  
 
 # Load the data for the selected league and season
+player_explosiveness_data = load_data(league, season, "Player_Explosiveness")
+player_efficiency_data = load_data(league, season, "Player_Efficiency")
 team_explosiveness = load_data(league, season, "Team_Explosiveness")
 opposition_explosiveness = load_data(league, season, "Opposition_Explosiveness")
+
+# Display Player Explosiveness data
+st.subheader('Player Explosiveness Data')
+st.dataframe(player_explosiveness_data)
+
+# Display Player Efficiency data
+st.subheader('Player Efficiency Data')
+st.dataframe(player_efficiency_data)
+
 
 # Plot Team Explosiveness data
 st.subheader('Team Explosiveness Data')
@@ -59,17 +70,10 @@ plt.title(f'Opposition Explosiveness Index {league} {season}')
 plt.gca().invert_yaxis()
 st.pyplot(plt.gcf())
 
-# Load and display Player Explosiveness data
-player_explosiveness_data = load_data(league, season, "Player_Explosiveness")
-st.subheader('Player Explosiveness Data')
-st.dataframe(player_explosiveness_data)
-
-# Load and display Player Efficiency data
-player_efficiency_data = load_data(league, season, "Player_Efficiency")
-st.subheader('Player Efficiency Data')
-st.dataframe(player_efficiency_data)
-
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+
+
+
 
 st.markdown("""**Player Explanation:**
 Not all xG is not made equal.
