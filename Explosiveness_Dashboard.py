@@ -52,8 +52,9 @@ ax.set_xlabel('Team Explosiveness Index')
 ax.set_ylabel('Team Name')
 ax.set_title('Team Explosiveness')
 
-# Set x-axis limits based on the maximum value in the data
+# Convert max_index to a numeric type and set x-axis limits
 max_index = team_explosiveness['Team Explosiveness Index'].max()
+max_index = float(max_index)  # Convert to float
 ax.set_xlim(0, max_index + 5)  # Add a buffer of 5 for better visualization
 
 # Display the chart in Streamlit
@@ -61,4 +62,3 @@ st.pyplot(fig)
 
 # Display last updated date and time
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
-
