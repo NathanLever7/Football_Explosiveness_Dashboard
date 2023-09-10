@@ -40,4 +40,4 @@ team_explosiveness = load_data(league, season)
 st.header('Team Explosiveness')
 fig, ax = plt.subplots(figsize=(8, 6))
 
-print(team_explosiveness)
+team_explosiveness
