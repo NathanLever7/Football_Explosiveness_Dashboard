@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 from datetime import datetime  # Import the datetime module
+import matplotlib.pyplot as plt
 
 # Base directory where the CSV files are stored.
 # This assumes that the data folders are in the same directory as your script.
@@ -36,12 +37,23 @@ season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])  # Add ot
 # Load the data for the selected league and season
 team_explosiveness = load_data(league, season)
 
-# Display horizontal bar chart for team explosiveness
+# Display the chart
 st.header('Team Explosiveness')
-# Set the DataFrame index to 'Squad' to use it for the y-axis labels
-team_explosiveness.set_index('Squad', inplace=True)
-# Create a horizontal bar chart
-st.bar_chart(team_explosiveness['Team Explosiveness Index'])
+fig, ax = plt.subplots(figsize=(8, 6))
+
+# Reverse the DataFrame to maintain the original order
+team_explosiveness = team_explosiveness[::-1]
+
+# Plot horizontal bars
+ax.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'])
+
+# Set axis labels and title
+ax.set_xlabel('Team Explosiveness Index')
+ax.set_ylabel('Team Name')
+ax.set_title('Team Explosiveness')
+
+# Display the chart in Streamlit
+st.pyplot(fig)
 
 # Display last updated date and time
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
