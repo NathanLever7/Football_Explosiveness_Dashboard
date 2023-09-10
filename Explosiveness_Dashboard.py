@@ -41,14 +41,19 @@ team_explosiveness = team_explosiveness.iloc[1:]
 # Create your matplotlib figure and plot your data
 fig, ax = plt.subplots(figsize=(8, 6))
 
+# Normalize the data for the x-axis to have a consistent scale
+min_index = team_explosiveness['Team Explosiveness Index'].min()
+max_index = team_explosiveness['Team Explosiveness Index'].max()
+normalized_values = (team_explosiveness['Team Explosiveness Index'] - min_index) / (max_index - min_index)
+
 # Reverse the DataFrame to maintain the original order
 team_explosiveness = team_explosiveness[::-1]
 
-# Plot horizontal bars
-ax.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'])
+# Plot horizontal bars with normalized x-axis values
+ax.barh(team_explosiveness['Squad'], normalized_values)
 
 # Set axis labels and title
-ax.set_xlabel('Team Explosiveness Index')
+ax.set_xlabel('Normalized Team Explosiveness Index')
 ax.set_ylabel('Team Name')
 ax.set_title('Team Explosiveness')
 
@@ -57,4 +62,3 @@ st.pyplot(fig)
 
 # Display last updated date and time
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
-
