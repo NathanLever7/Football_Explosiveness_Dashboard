@@ -5,6 +5,8 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import numpy as np
+from sklearn.linear_model import LinearRegression
+
 
 # Base directory where the CSV files are stored.
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -24,10 +26,7 @@ seasons = ['2023/24', '2022/23']
 all_season_data_explosiveness = pd.concat([load_data(league, season, "Team_Explosiveness") for season in seasons])
 all_season_data_efficiency = pd.concat([load_data(league, season, "Team_Efficiency") for season in seasons])
 
-mean_explosiveness = all_season_data_explosiveness['Team Explosiveness Index'].mean()
-mean_efficiency = all_season_data_efficiency['Team Efficiency Index'].mean()
 
-slope = mean_efficiency / mean_explosiveness
 
 # Streamlit UI
 st.title('Explosiveness vs Consistency')
@@ -120,10 +119,32 @@ team_data = team_explosiveness.merge(team_consistency, on='Squad', suffixes=('_E
 # Merging data for opposition
 opposition_data = opposition_explosiveness.merge(opposition_consistency, on='Squad', suffixes=('_Explosiveness', '_Consistency'))
 
-# Calculate values for the diagonal line
-x_values = np.linspace(0, max(all_season_data_explosiveness['Team Explosiveness Index']), 100)  
-y_values = slope * x_values
+# Merging data for teams
+team_data = team_explosiveness.merge(team_consistency, on='Squad', suffixes=('_Explosiveness', '_Consistency'))
 
+# Merging data for opposition
+opposition_data = opposition_explosiveness.merge(opposition_consistency, on='Squad', suffixes=('_Explosiveness', '_Consistency'))
+
+# New code block for linear regression
+# Prepare data for linear regression
+x = team_data['Team Explosiveness Index'].values.reshape(-1,1)
+y = team_data['Team Efficiency Index'].values.reshape(-1,1)
+
+# Create a linear regression model
+model = LinearRegression()
+
+# Fit the model using the data points
+model.fit(x, y)
+
+# Get the slope (coefficient) and intercept from the model
+slope = model.coef_[0]
+intercept = model.intercept_
+
+# Create a range of x values for plotting the trendline
+x_values = np.linspace(0, max(team_data['Team Explosiveness Index']), 100)
+
+# Calculate the y values of the trendline
+y_values = model.predict(x_values.reshape(-1,1))
 
 # Plot Team Efficiency vs Consistency
 st.subheader('Team Explosiveness vs Consistency')
