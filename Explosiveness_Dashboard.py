@@ -165,12 +165,12 @@ st.pyplot(plt.gcf())
 # Plot Player Efficiency vs Consistency
 st.subheader('Player Explosiveness vs Consistency')
 plt.figure(figsize=(12, 8))
-plt.scatter(player_data['Player Explosiveness Index'], player_data['Player Efficiency Index'], c='purple')
+plt.scatter(player_data['Explosiveness'], player_data['Efficiency'], c='purple')
 plt.xlabel('Player Explosiveness Index')
 plt.ylabel('Player Consistency Index')
 plt.title(f'Player Explosiveness vs Consistency {league} {season}')
 for i, player in enumerate(player_data['Player']):
-    plt.annotate(player, (player_data['Player Explosiveness Index'][i], player_data['Player Efficiency Index'][i]), fontsize=8, alpha=0.7)
+    plt.annotate(player, (player_data['Explosiveness'][i], player_data['Efficiency'][i]), fontsize=8, alpha=0.7)
 plt.plot(x_values_player, y_values_player, label='Average Relationship Line', linestyle='--', color='green')
 st.pyplot(plt.gcf())
 
