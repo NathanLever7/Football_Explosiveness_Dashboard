@@ -18,6 +18,17 @@ def load_data(league, season, data_type):
     
     return data_df
 
+# Load data from all available seasons and calculate mean values
+seasons = ['2023/24', '2022/23']
+all_season_data_explosiveness = pd.concat([load_data(league, season, "Team_Explosiveness") for season in seasons])
+all_season_data_efficiency = pd.concat([load_data(league, season, "Team_Efficiency") for season in seasons])
+
+mean_explosiveness = all_season_data_explosiveness['Team Explosiveness Index'].mean()
+mean_efficiency = all_season_data_efficiency['Team Efficiency Index'].mean()
+
+slope = mean_efficiency / mean_explosiveness
+
+
 # Streamlit UI
 st.title('Explosiveness vs Consistency')
 
@@ -109,6 +120,11 @@ team_data = team_explosiveness.merge(team_consistency, on='Squad', suffixes=('_E
 # Merging data for opposition
 opposition_data = opposition_explosiveness.merge(opposition_consistency, on='Squad', suffixes=('_Explosiveness', '_Consistency'))
 
+# Calculate values for the diagonal line
+x_values = np.linspace(0, max(all_season_data_explosiveness['Team Explosiveness Index']), 100)  
+y_values = slope * x_values
+
+
 # Plot Team Efficiency vs Consistency
 st.subheader('Team Explosiveness vs Consistency')
 plt.figure(figsize=(12, 8))
@@ -118,6 +134,7 @@ plt.ylabel('Team Consistency Index')
 plt.title(f'Team Explosiveness vs Consistency {league} {season}')
 for i, team in enumerate(team_data['Squad']):
     plt.annotate(team, (team_data['Team Explosiveness Index'][i], team_data['Team Efficiency Index'][i]), fontsize=8, alpha=0.7)
+plt.plot(x_values, y_values, label='Average Relationship Line', linestyle='--', color='green')
 st.pyplot(plt.gcf())
 
 # Plot Opposition Efficiency vs Consistency
@@ -129,6 +146,7 @@ plt.ylabel('Opposition Efficiency Index')
 plt.title(f'Opposition Explosiveness vs Consistency {league} {season}')
 for i, team in enumerate(opposition_data['Squad']):
     plt.annotate(team, (opposition_data['Team Explosiveness Index'][i], opposition_data['Team Efficiency Index'][i]), fontsize=8, alpha=0.7)
+plt.plot(x_values, y_values, label='Average Relationship Line', linestyle='--', color='green')
 st.pyplot(plt.gcf())
 
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
