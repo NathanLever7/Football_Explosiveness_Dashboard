@@ -18,7 +18,7 @@ def load_data(league, season, data_type):
     
     return data_df
 
-# Load data from all available seasons and calculate mean values
+league = 'Premier League'
 seasons = ['2023/24', '2022/23']
 all_season_data_explosiveness = pd.concat([load_data(league, season, "Team_Explosiveness") for season in seasons])
 all_season_data_efficiency = pd.concat([load_data(league, season, "Team_Efficiency") for season in seasons])
@@ -27,7 +27,6 @@ mean_explosiveness = all_season_data_explosiveness['Team Explosiveness Index'].m
 mean_efficiency = all_season_data_efficiency['Team Efficiency Index'].mean()
 
 slope = mean_efficiency / mean_explosiveness
-
 
 # Streamlit UI
 st.title('Explosiveness vs Consistency')
