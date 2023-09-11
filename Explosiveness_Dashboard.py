@@ -170,12 +170,18 @@ selected_season_player_data = player_explosiveness_data.merge(player_consistency
 x_values_player = np.linspace(0, max(all_season_player_explosiveness_data['Explosiveness']), 100)  
 y_values_player = player_slope * x_values_player
 
+
+max_explosiveness = player_explosiveness_data['Explosiveness'].max() * 1.1
+max_consistency = player_consistency_data['Efficiency'].max() * 1.1
+
 # Plot Player Explosiveness vs Consistency
 st.subheader('Player Explosiveness vs Consistency')
 plt.figure(figsize=(12, 8))
 plt.scatter(selected_season_player_data['Explosiveness'], selected_season_player_data['Efficiency'], c='purple')
 plt.xlabel('Player Explosiveness Index')
 plt.ylabel('Player Consistency Index')
+plt.xlim(0, max_explosiveness)
+plt.ylim(0, max_consistency)
 plt.title(f'Player Explosiveness vs Consistency {league} {season}')
 for i, player in enumerate(selected_season_player_data['Player']):
     plt.annotate(player, (selected_season_player_data['Explosiveness'][i], selected_season_player_data['Efficiency'][i]), fontsize=8, alpha=0.7)
