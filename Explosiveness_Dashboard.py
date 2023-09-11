@@ -1,23 +1,3 @@
-Collection: First, you would need to gather detailed player statistics which include metrics such as shots, xG (expected goals), non-penalty xG, etc. for individual players. You might already have this data from your earlier work.
-
-Data Processing: Just like with the teams, you would calculate the relevant metrics for each player. This might include metrics like npxG (non-penalty expected goals) per 90 minutes, shot quality, etc.
-
-Visualization: You would then create similar scatter plots for players, plotting individual players' explosiveness vs consistency, perhaps even allowing for filtering by position or team to enable more nuanced analysis.
-
-Analysis: Finally, you would analyze the data to identify patterns and insights, such as which players are particularly consistent or explosive, and potentially identifying undervalued players or predicting future performance.
-
-Integration: Integrate this analysis into your existing dashboard, allowing users to toggle between team-level and player-level views.
-
-Code Modification: You'd need to modify your existing scripts (both the data preparation script and the Streamlit dashboard script) to incorporate this new analysis.
-
-Remember to test your code at each step to ensure that the new features are working as expected, and to potentially identify and fix bugs early in the development process.
-
-Would you like assistance in developing this further?
-
-
-
-
-User
 import streamlit as st
 import pandas as pd
 import os
