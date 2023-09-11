@@ -29,11 +29,11 @@ season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])
 
 # Load the data for the selected league and season
 player_explosiveness_data = load_data(league, season, "Player_Explosiveness")
-player_efficiency_data = load_data(league, season, "Player_Efficiency")
+player_consistency_data = load_data(league, season, "Player_Efficiency")
 team_explosiveness = load_data(league, season, "Team_Explosiveness")
 opposition_explosiveness = load_data(league, season, "Opposition_Explosiveness")
-team_consistency = load_data(league, season, "Team_Consistency")
-opposition_consistency = load_data(league, season, "Opposition_Consistency")
+team_consistency = load_data(league, season, "Team_Efficiency")
+opposition_consistency = load_data(league, season, "Opposition_Efficiency")
 
 # Display Player Explosiveness data
 st.subheader('Player Explosiveness Data')
@@ -41,7 +41,7 @@ st.dataframe(player_explosiveness_data)
 
 # Display Player Efficiency data
 st.subheader('Player Consistency Data')
-st.dataframe(player_efficiency_data)
+st.dataframe(player_consistency_data)
 
 
 # Plot Team Explosiveness data
