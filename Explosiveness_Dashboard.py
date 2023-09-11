@@ -24,10 +24,23 @@ seasons = ['2023/24', '2022/23']
 all_season_data_explosiveness = pd.concat([load_data(league, season, "Team_Explosiveness") for season in seasons])
 all_season_data_efficiency = pd.concat([load_data(league, season, "Team_Efficiency") for season in seasons])
 
+player_explosiveness_data = pd.concat([load_data(league, season, "Player_Explosiveness") for season in ['2023/24', '2022/23']])
+player_consistency_data = pd.concat([load_data(league, season, "Player_Efficiency") for season in ['2023/24', '2022/23']])
+
+
 mean_explosiveness = all_season_data_explosiveness['Team Explosiveness Index'].mean()
 mean_efficiency = all_season_data_efficiency['Team Efficiency Index'].mean()
 
 slope = mean_efficiency / mean_explosiveness
+
+
+player_data = player_explosiveness_data.merge(player_consistency_data, on='Player', suffixes=('_Explosiveness', '_Consistency'))
+
+# Calculate values for the diagonal line for players
+player_slope = player_data['Player Efficiency Index'].mean() / player_data['Player Explosiveness Index'].mean()
+x_values_player = np.linspace(0, max(player_data['Player Explosiveness Index']), 100)
+y_values_player = player_slope * x_values_player
+
 
 # Streamlit UI
 st.title('Explosiveness vs Consistency')
@@ -148,13 +161,6 @@ plt.plot(x_values, y_values, label='Average Relationship Line', linestyle='--', 
 st.pyplot(plt.gcf())
 
 
-# Merging data for players
-player_data = player_explosiveness_data.merge(player_consistency_data, on='Player', suffixes=('_Explosiveness', '_Consistency'))
-
-# Calculate values for the diagonal line for players
-player_slope = player_data['Player Efficiency Index'].mean() / player_data['Player Explosiveness Index'].mean()
-x_values_player = np.linspace(0, max(player_data['Player Explosiveness Index']), 100)
-y_values_player = player_slope * x_values_player
 
 # Plot Player Efficiency vs Consistency
 st.subheader('Player Explosiveness vs Consistency')
@@ -167,8 +173,6 @@ for i, player in enumerate(player_data['Player']):
     plt.annotate(player, (player_data['Player Explosiveness Index'][i], player_data['Player Efficiency Index'][i]), fontsize=8, alpha=0.7)
 plt.plot(x_values_player, y_values_player, label='Average Relationship Line', linestyle='--', color='green')
 st.pyplot(plt.gcf())
-
-
 
 
 
