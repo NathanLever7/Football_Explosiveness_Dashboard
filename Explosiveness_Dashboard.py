@@ -32,13 +32,15 @@ player_explosiveness_data = load_data(league, season, "Player_Explosiveness")
 player_efficiency_data = load_data(league, season, "Player_Efficiency")
 team_explosiveness = load_data(league, season, "Team_Explosiveness")
 opposition_explosiveness = load_data(league, season, "Opposition_Explosiveness")
+team_consistency = load_data(league, season, "Team_Consistency")
+opposition_consistency = load_data(league, season, "Opposition_Consistency")
 
 # Display Player Explosiveness data
 st.subheader('Player Explosiveness Data')
 st.dataframe(player_explosiveness_data)
 
 # Display Player Efficiency data
-st.subheader('Player Efficiency Data')
+st.subheader('Player Consistency Data')
 st.dataframe(player_efficiency_data)
 
 
@@ -70,6 +72,34 @@ plt.title(f'Opposition Explosiveness Index {league} {season}')
 plt.gca().invert_yaxis()
 st.pyplot(plt.gcf())
 
+# Plot Team Consistency data
+st.subheader('Team Consistency Data')
+norm = colors.Normalize(vmin=team_consistency['Team Efficiency Index'].min(), vmax=team_consistency['Team Efficiency Index'].max())
+cmap = plt.cm.get_cmap("coolwarm")
+color_values = cmap(norm(team_consistency['Team Efficiency Index'].values))
+
+plt.figure(figsize=(12, 8))
+plt.barh(team_consistency['Squad'], team_consistency['Team Efficiency Index'], color=color_values)
+plt.xlabel('Team Efficiency Index')
+plt.ylabel('Team')
+plt.title(f'Team Efficiency Index {league} {season}')
+plt.gca().invert_yaxis()
+st.pyplot(plt.gcf())
+
+# Plot Opposition Consistency data
+st.subheader('Opposition Consistency Data')
+norm = colors.Normalize(vmin=opposition_consistency['Team Efficiency Index'].min(), vmax=opposition_consistency['Team Efficiency Index'].max())
+cmap = plt.cm.get_cmap("coolwarm_r")  # Reversed colormap for the opposition data
+color_values = cmap(norm(opposition_consistency['Team Efficiency Index'].values))
+
+plt.figure(figsize=(12, 8))
+plt.barh(opposition_consistency['Squad'], opposition_consistency['Team Efficiency Index'], color=color_values)
+plt.xlabel('Team Efficiency Index')
+plt.ylabel('Team')
+plt.title(f'Opposition Efficiency Index {league} {season}')
+plt.gca().invert_yaxis()
+st.pyplot(plt.gcf())
+
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
 
 
@@ -92,7 +122,11 @@ st.markdown("""**Team Explanation:**
 
 Team explosiveness orders the teams who take a lot of shots and generate high xG. They are the teams likely to score many goals in a given game.
 
-In contrast, the opposition data shows the teams that concede a lot of shots, and high xG. They are the teams likely to concede many goals in a given game.""")
+In contrast, the opposition data shows the teams that concede a lot of shots, and high xG. They are the teams likely to concede many goals in a given game.
+
+In terms of consistency, teams high up create a high number of good chances, they should score a less variable amount of goals than those at the top of the explosiveness rankings.
+
+The opposition data shows teams that should have conceded a more stable amount of goals that those at the top of the explosiveness metric""")
 
 
 
