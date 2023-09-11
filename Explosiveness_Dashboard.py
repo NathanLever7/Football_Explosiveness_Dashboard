@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib import colors
+import numpy as np
 
 # Base directory where the CSV files are stored.
 base_dir = os.path.abspath(os.path.dirname(__file__))
