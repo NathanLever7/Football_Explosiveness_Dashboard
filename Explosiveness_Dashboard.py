@@ -112,8 +112,6 @@ plt.gca().invert_yaxis()
 st.pyplot(plt.gcf())
 
 
-
-
 # Merging data for teams
 team_data = team_explosiveness.merge(team_consistency, on='Squad', suffixes=('_Explosiveness', '_Consistency'))
 
@@ -148,6 +146,32 @@ for i, team in enumerate(opposition_data['Squad']):
     plt.annotate(team, (opposition_data['Team Explosiveness Index'][i], opposition_data['Team Efficiency Index'][i]), fontsize=8, alpha=0.7)
 plt.plot(x_values, y_values, label='Average Relationship Line', linestyle='--', color='green')
 st.pyplot(plt.gcf())
+
+
+# Merging data for players
+player_data = player_explosiveness_data.merge(player_consistency_data, on='Player', suffixes=('_Explosiveness', '_Consistency'))
+
+# Calculate values for the diagonal line for players
+player_slope = player_data['Player Efficiency Index'].mean() / player_data['Player Explosiveness Index'].mean()
+x_values_player = np.linspace(0, max(player_data['Player Explosiveness Index']), 100)
+y_values_player = player_slope * x_values_player
+
+# Plot Player Efficiency vs Consistency
+st.subheader('Player Explosiveness vs Consistency')
+plt.figure(figsize=(12, 8))
+plt.scatter(player_data['Player Explosiveness Index'], player_data['Player Efficiency Index'], c='purple')
+plt.xlabel('Player Explosiveness Index')
+plt.ylabel('Player Consistency Index')
+plt.title(f'Player Explosiveness vs Consistency {league} {season}')
+for i, player in enumerate(player_data['Player']):
+    plt.annotate(player, (player_data['Player Explosiveness Index'][i], player_data['Player Efficiency Index'][i]), fontsize=8, alpha=0.7)
+plt.plot(x_values_player, y_values_player, label='Average Relationship Line', linestyle='--', color='green')
+st.pyplot(plt.gcf())
+
+
+
+
+
 
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
 
