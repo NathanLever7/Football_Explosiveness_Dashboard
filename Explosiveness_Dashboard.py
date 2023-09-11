@@ -1,3 +1,23 @@
+Collection: First, you would need to gather detailed player statistics which include metrics such as shots, xG (expected goals), non-penalty xG, etc. for individual players. You might already have this data from your earlier work.
+
+Data Processing: Just like with the teams, you would calculate the relevant metrics for each player. This might include metrics like npxG (non-penalty expected goals) per 90 minutes, shot quality, etc.
+
+Visualization: You would then create similar scatter plots for players, plotting individual players' explosiveness vs consistency, perhaps even allowing for filtering by position or team to enable more nuanced analysis.
+
+Analysis: Finally, you would analyze the data to identify patterns and insights, such as which players are particularly consistent or explosive, and potentially identifying undervalued players or predicting future performance.
+
+Integration: Integrate this analysis into your existing dashboard, allowing users to toggle between team-level and player-level views.
+
+Code Modification: You'd need to modify your existing scripts (both the data preparation script and the Streamlit dashboard script) to incorporate this new analysis.
+
+Remember to test your code at each step to ensure that the new features are working as expected, and to potentially identify and fix bugs early in the development process.
+
+Would you like assistance in developing this further?
+
+
+
+
+User
 import streamlit as st
 import pandas as pd
 import os
@@ -24,23 +44,10 @@ seasons = ['2023/24', '2022/23']
 all_season_data_explosiveness = pd.concat([load_data(league, season, "Team_Explosiveness") for season in seasons])
 all_season_data_efficiency = pd.concat([load_data(league, season, "Team_Efficiency") for season in seasons])
 
-player_explosiveness_data = pd.concat([load_data(league, season, "Player_Explosiveness") for season in ['2023/24', '2022/23']])
-player_consistency_data = pd.concat([load_data(league, season, "Player_Efficiency") for season in ['2023/24', '2022/23']])
-
-
 mean_explosiveness = all_season_data_explosiveness['Team Explosiveness Index'].mean()
 mean_efficiency = all_season_data_efficiency['Team Efficiency Index'].mean()
 
 slope = mean_efficiency / mean_explosiveness
-
-
-player_data = player_explosiveness_data.merge(player_consistency_data, on='Player', suffixes=('_Explosiveness', '_Consistency'))
-
-# Calculate values for the diagonal line for players
-player_slope = player_data['Efficiency'].mean() / player_data['Explosiveness'].mean()
-x_values_player = np.linspace(0, max(player_data['Explosiveness']), 100)
-y_values_player = player_slope * x_values_player
-
 
 # Streamlit UI
 st.title('Explosiveness vs Consistency')
@@ -125,6 +132,8 @@ plt.gca().invert_yaxis()
 st.pyplot(plt.gcf())
 
 
+
+
 # Merging data for teams
 team_data = team_explosiveness.merge(team_consistency, on='Squad', suffixes=('_Explosiveness', '_Consistency'))
 
@@ -160,24 +169,9 @@ for i, team in enumerate(opposition_data['Squad']):
 plt.plot(x_values, y_values, label='Average Relationship Line', linestyle='--', color='green')
 st.pyplot(plt.gcf())
 
-
-
-# Plot Player Efficiency vs Consistency
-st.subheader('Player Explosiveness vs Consistency')
-plt.figure(figsize=(12, 8))
-plt.scatter(player_data['Explosiveness'], player_data['Efficiency'], c='purple')
-plt.xlabel('Player Explosiveness Index')
-plt.ylabel('Player Consistency Index')
-plt.title(f'Player Explosiveness vs Consistency {league} {season}')
-for i, player in enumerate(player_data['Player']):
-    plt.annotate(player, (player_data['Explosiveness'][i], player_data['Efficiency'][i]), fontsize=8, alpha=0.7)
-plt.plot(x_values_player, y_values_player, label='Average Relationship Line', linestyle='--', color='green')
-st.pyplot(plt.gcf())
-
-
-
-
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+
+
 
 
 
