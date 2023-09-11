@@ -37,8 +37,8 @@ slope = mean_efficiency / mean_explosiveness
 player_data = player_explosiveness_data.merge(player_consistency_data, on='Player', suffixes=('_Explosiveness', '_Consistency'))
 
 # Calculate values for the diagonal line for players
-player_slope = player_data['Player Efficiency Index'].mean() / player_data['Player Explosiveness Index'].mean()
-x_values_player = np.linspace(0, max(player_data['Player Explosiveness Index']), 100)
+player_slope = player_data['Efficiency'].mean() / player_data['Explosiveness'].mean()
+x_values_player = np.linspace(0, max(player_data['Explosiveness']), 100)
 y_values_player = player_slope * x_values_player
 
 
