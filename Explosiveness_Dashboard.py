@@ -34,7 +34,7 @@ all_season_player_explosiveness_data = pd.concat([load_data(league, season, "Pla
 all_season_player_consistency_data = pd.concat([load_data(league, season, "Player_Efficiency") for season in seasons])
 
 player_mean_explosiveness = all_season_player_explosiveness_data['Explosiveness'].mean()
-player_mean_consistency = all_season_player_consistency_data['Consistency'].mean()
+player_mean_consistency = all_season_player_consistency_data['Efficiency'].mean()
 
 player_slope = player_mean_consistency / player_mean_explosiveness
 
@@ -173,12 +173,12 @@ y_values_player = player_slope * x_values_player
 # Plot Player Explosiveness vs Consistency
 st.subheader('Player Explosiveness vs Consistency')
 plt.figure(figsize=(12, 8))
-plt.scatter(selected_season_player_data['Explosiveness'], selected_season_player_data['Consistency'], c='purple')
+plt.scatter(selected_season_player_data['Explosiveness'], selected_season_player_data['Efficiency'], c='purple')
 plt.xlabel('Player Explosiveness Index')
 plt.ylabel('Player Consistency Index')
 plt.title(f'Player Explosiveness vs Consistency {league} {season}')
 for i, player in enumerate(selected_season_player_data['Player']):
-    plt.annotate(player, (selected_season_player_data['Explosiveness'][i], selected_season_player_data['Consistency'][i]), fontsize=8, alpha=0.7)
+    plt.annotate(player, (selected_season_player_data['Explosiveness'][i], selected_season_player_data['Efficiency'][i]), fontsize=8, alpha=0.7)
 plt.plot(x_values_player, y_values_player, label='Average Relationship Line', linestyle='--', color='green')
 st.pyplot(plt.gcf())
 
