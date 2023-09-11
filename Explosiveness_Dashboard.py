@@ -5,7 +5,6 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import numpy as np
-from sklearn.linear_model import LinearRegression
 
 # Base directory where the CSV files are stored.
 base_dir = os.path.abspath(os.path.dirname(__file__))
@@ -25,22 +24,10 @@ seasons = ['2023/24', '2022/23']
 all_season_data_explosiveness = pd.concat([load_data(league, season, "Team_Explosiveness") for season in seasons])
 all_season_data_efficiency = pd.concat([load_data(league, season, "Team_Efficiency") for season in seasons])
 
-# Linear regression for trendline calculation
-lr_team = LinearRegression()
-lr_team.fit(all_season_data_explosiveness['Team Explosiveness Index'].values.reshape(-1,1), 
-            all_season_data_efficiency['Team Efficiency Index'].values.reshape(-1,1))
-team_slope = lr_team.coef_[0]
-team_intercept = lr_team.intercept_
+mean_explosiveness = all_season_data_explosiveness['Team Explosiveness Index'].mean()
+mean_efficiency = all_season_data_efficiency['Team Efficiency Index'].mean()
 
-all_season_player_explosiveness_data = pd.concat([load_data(league, season, "Player_Explosiveness") for season in seasons])
-all_season_player_consistency_data = pd.concat([load_data(league, season, "Player_Efficiency") for season in seasons])
-
-# Linear regression for trendline calculation
-lr_player = LinearRegression()
-lr_player.fit(all_season_player_explosiveness_data['Explosiveness'].values.reshape(-1,1), 
-              all_season_player_consistency_data['Efficiency'].values.reshape(-1,1))
-player_slope = lr_player.coef_[0]
-player_intercept = lr_player.intercept_
+slope = mean_efficiency / mean_explosiveness
 
 # Streamlit UI
 st.title('Explosiveness vs Consistency')
@@ -67,49 +54,102 @@ st.dataframe(player_explosiveness_data)
 st.subheader('Player Consistency Data')
 st.dataframe(player_consistency_data)
 
+
 # Plot Team Explosiveness data
 st.subheader('Team Explosiveness Data')
 norm = colors.Normalize(vmin=team_explosiveness['Team Explosiveness Index'].min(), vmax=team_explosiveness['Team Explosiveness Index'].max())
 cmap = plt.cm.get_cmap("coolwarm")
 color_values = cmap(norm(team_explosiveness['Team Explosiveness Index'].values))
 
-fig, ax = plt.subplots()
-ax.scatter(team_explosiveness['Team Explosiveness Index'], team_consistency['Team Efficiency Index'], color=color_values)
-ax.plot(team_explosiveness['Team Explosiveness Index'], team_slope*team_explosiveness['Team Explosiveness Index'] + team_intercept, color='red')
-ax.set_xlabel('Team Explosiveness Index')
-ax.set_ylabel('Team Efficiency Index')
-st.pyplot(fig)
+plt.figure(figsize=(12, 8))
+plt.barh(team_explosiveness['Squad'], team_explosiveness['Team Explosiveness Index'], color=color_values)
+plt.xlabel('Team Explosiveness Index')
+plt.ylabel('Team')
+plt.title(f'Team Explosiveness Index {league} {season}')
+plt.gca().invert_yaxis()
+st.pyplot(plt.gcf())
 
-# Display Opposition Explosiveness data
+# Plot Opposition Explosiveness data
 st.subheader('Opposition Explosiveness Data')
-st.dataframe(opposition_explosiveness)
+norm = colors.Normalize(vmin=opposition_explosiveness['Team Explosiveness Index'].min(), vmax=opposition_explosiveness['Team Explosiveness Index'].max())
+cmap = plt.cm.get_cmap("coolwarm_r")  # Reversed colormap
+color_values = cmap(norm(opposition_explosiveness['Team Explosiveness Index'].values))
 
-# Display Opposition Efficiency data
-st.subheader('Opposition Efficiency Data')
-st.dataframe(opposition_consistency)
+plt.figure(figsize=(12, 8))
+plt.barh(opposition_explosiveness['Squad'], opposition_explosiveness['Team Explosiveness Index'], color=color_values)
+plt.xlabel('Team Explosiveness Index')
+plt.ylabel('Team')
+plt.title(f'Opposition Explosiveness Index {league} {season}')
+plt.gca().invert_yaxis()
+st.pyplot(plt.gcf())
 
-# Explanation of Metrics
-st.subheader('Explanation of Metrics')
+# Plot Team Consistency data
+st.subheader('Team Consistency Data')
+norm = colors.Normalize(vmin=team_consistency['Team Efficiency Index'].min(), vmax=team_consistency['Team Efficiency Index'].max())
+cmap = plt.cm.get_cmap("coolwarm")
+color_values = cmap(norm(team_consistency['Team Efficiency Index'].values))
 
-st.write('''
-### Explosiveness
-The Explosiveness metric is a measure of how explosive a player or team's actions are on average throughout a match. It is calculated based on various statistics such as the number of shots taken, the number of dribbles attempted, etc.
+plt.figure(figsize=(12, 8))
+plt.barh(team_consistency['Squad'], team_consistency['Team Efficiency Index'], color=color_values)
+plt.xlabel('Team Efficiency Index')
+plt.ylabel('Team')
+plt.title(f'Team Efficiency Index {league} {season}')
+plt.gca().invert_yaxis()
+st.pyplot(plt.gcf())
 
-### Consistency
-The Consistency metric is a measure of how consistently a player or team performs over time. It is calculated based on various statistics such as the standard deviation of the performance metrics over a number of matches.
+# Plot Opposition Consistency data
+st.subheader('Opposition Consistency Data')
+norm = colors.Normalize(vmin=opposition_consistency['Team Efficiency Index'].min(), vmax=opposition_consistency['Team Efficiency Index'].max())
+cmap = plt.cm.get_cmap("coolwarm_r")  # Reversed colormap for the opposition data
+color_values = cmap(norm(opposition_consistency['Team Efficiency Index'].values))
 
-### Efficiency
-The Efficiency metric is a measure of how efficiently a player or team uses their opportunities to score goals. It is calculated based on various statistics such as the conversion rate of shots to goals.
+plt.figure(figsize=(12, 8))
+plt.barh(opposition_consistency['Squad'], opposition_consistency['Team Efficiency Index'], color=color_values)
+plt.xlabel('Team Efficiency Index')
+plt.ylabel('Team')
+plt.title(f'Opposition Efficiency Index {league} {season}')
+plt.gca().invert_yaxis()
+st.pyplot(plt.gcf())
 
-#### Note
-The scatter plot above shows the relationship between the Team Explosiveness Index and the Team Efficiency Index. The trendline in red indicates the general trend in the data, with the slope of the trendline indicating the strength of the relationship between the two metrics. 
-''')
 
-# The above description might need adjustments based on the exact calculations for your metrics.
 
-if __name__ == "__main__":
-    st.write("This streamlit app is running")
 
+# Merging data for teams
+team_data = team_explosiveness.merge(team_consistency, on='Squad', suffixes=('_Explosiveness', '_Consistency'))
+
+# Merging data for opposition
+opposition_data = opposition_explosiveness.merge(opposition_consistency, on='Squad', suffixes=('_Explosiveness', '_Consistency'))
+
+# Calculate values for the diagonal line
+x_values = np.linspace(0, max(all_season_data_explosiveness['Team Explosiveness Index']), 100)  
+y_values = slope * x_values
+
+
+# Plot Team Efficiency vs Consistency
+st.subheader('Team Explosiveness vs Consistency')
+plt.figure(figsize=(12, 8))
+plt.scatter(team_data['Team Explosiveness Index'], team_data['Team Efficiency Index'], c='blue')
+plt.xlabel('Team Explosiveness Index')
+plt.ylabel('Team Consistency Index')
+plt.title(f'Team Explosiveness vs Consistency {league} {season}')
+for i, team in enumerate(team_data['Squad']):
+    plt.annotate(team, (team_data['Team Explosiveness Index'][i], team_data['Team Efficiency Index'][i]), fontsize=8, alpha=0.7)
+plt.plot(x_values, y_values, label='Average Relationship Line', linestyle='--', color='green')
+st.pyplot(plt.gcf())
+
+# Plot Opposition Efficiency vs Consistency
+st.subheader('Opposition Explosiveness vs Consistency')
+plt.figure(figsize=(12, 8))
+plt.scatter(opposition_data['Team Explosiveness Index'], opposition_data['Team Efficiency Index'], c='red')
+plt.xlabel('Opposition Explosiveness Index')
+plt.ylabel('Opposition Efficiency Index')
+plt.title(f'Opposition Explosiveness vs Consistency {league} {season}')
+for i, team in enumerate(opposition_data['Squad']):
+    plt.annotate(team, (opposition_data['Team Explosiveness Index'][i], opposition_data['Team Efficiency Index'][i]), fontsize=8, alpha=0.7)
+plt.plot(x_values, y_values, label='Average Relationship Line', linestyle='--', color='green')
+st.pyplot(plt.gcf())
+
+st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
 
 
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
