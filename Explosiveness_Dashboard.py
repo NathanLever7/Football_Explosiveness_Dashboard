@@ -102,7 +102,6 @@ st.pyplot(plt.gcf())
 
 
 
-# ... (previous code remains unchanged)
 
 # Merging data for teams
 team_data = team_explosiveness.merge(team_consistency, on='Squad', suffixes=('_Explosiveness', '_Consistency'))
@@ -111,23 +110,23 @@ team_data = team_explosiveness.merge(team_consistency, on='Squad', suffixes=('_E
 opposition_data = opposition_explosiveness.merge(opposition_consistency, on='Squad', suffixes=('_Explosiveness', '_Consistency'))
 
 # Plot Team Efficiency vs Consistency
-st.subheader('Team Efficiency vs Consistency')
+st.subheader('Team Explosiveness vs Consistency')
 plt.figure(figsize=(12, 8))
 plt.scatter(team_data['Team Explosiveness Index'], team_data['Team Efficiency Index'], c='blue')
 plt.xlabel('Team Explosiveness Index')
-plt.ylabel('Team Efficiency Index')
-plt.title(f'Team Efficiency vs Consistency {league} {season}')
+plt.ylabel('Team Consistency Index')
+plt.title(f'Team Explosiveness vs Consistency {league} {season}')
 for i, team in enumerate(team_data['Squad']):
     plt.annotate(team, (team_data['Team Explosiveness Index'][i], team_data['Team Efficiency Index'][i]), fontsize=8, alpha=0.7)
 st.pyplot(plt.gcf())
 
 # Plot Opposition Efficiency vs Consistency
-st.subheader('Opposition Efficiency vs Consistency')
+st.subheader('Opposition Explosiveness vs Consistency')
 plt.figure(figsize=(12, 8))
 plt.scatter(opposition_data['Team Explosiveness Index'], opposition_data['Team Efficiency Index'], c='red')
 plt.xlabel('Opposition Explosiveness Index')
 plt.ylabel('Opposition Efficiency Index')
-plt.title(f'Opposition Efficiency vs Consistency {league} {season}')
+plt.title(f'Opposition Explosiveness vs Consistency {league} {season}')
 for i, team in enumerate(opposition_data['Squad']):
     plt.annotate(team, (opposition_data['Team Explosiveness Index'][i], opposition_data['Team Efficiency Index'][i]), fontsize=8, alpha=0.7)
 st.pyplot(plt.gcf())
