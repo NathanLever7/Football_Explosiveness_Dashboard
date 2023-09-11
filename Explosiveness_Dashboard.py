@@ -120,13 +120,13 @@ In both cases, we expect players that score highly, to score goals often. Explos
 
 st.markdown("""**Team Explanation:**
 
-Team explosiveness orders the teams who take a lot of shots and generate high xG. They are the teams likely to score many goals in a given game.
+Team explosiveness orders the teams who take a lot of shots and generate high xG. They are the teams likely to score many goals in a given game, but outcome can be quite variable.
 
-In contrast, the opposition data shows the teams that concede a lot of shots, and high xG. They are the teams likely to concede many goals in a given game.
+In contrast, the opposition data shows the teams that concede a lot of shots, and high xG. They are the teams likely to concede many goals in a given game, but again, how many goals can be more variable.
 
 In terms of consistency, teams high up create a high number of good chances, they should score a less variable amount of goals than those at the top of the explosiveness rankings.
 
-The opposition data shows teams that should have conceded a more stable amount of goals that those at the top of the explosiveness metric""")
+The opposition data shows teams that should have conceded a more stable amount of goals that those at the top of the explosiveness opposition metric""")
 
 
 
