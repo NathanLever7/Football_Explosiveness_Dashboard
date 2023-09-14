@@ -22,11 +22,11 @@ def load_data(league, season, data_type):
 league = 'Premier League'
 seasons = ['2023/24', '2022/23']
 all_season_data_explosiveness = pd.concat([load_data(league, season, "Team_Explosiveness") for season in seasons])
-all_season_data_efficiency = pd.concat([load_data(league, season, "Team_Efficiency") for season in seasons])
+all_season_data_consistency = pd.concat([load_data(league, season, "Team_Consistency") for season in seasons])
 
 
 all_season_player_explosiveness_data = pd.concat([load_data(league, season, "Player_Explosiveness") for season in seasons])
-all_season_player_consistency_data = pd.concat([load_data(league, season, "Player_Efficiency") for season in seasons])
+all_season_player_consistency_data = pd.concat([load_data(league, season, "Player_Consistency") for season in seasons])
 
 # Streamlit UI
 st.title('Explosiveness vs Consistency')
@@ -39,17 +39,17 @@ season = st.sidebar.selectbox('Select Season', ['2023/24', '2022/23'])
 
 # Load the data for the selected league and season
 player_explosiveness_data = load_data(league, season, "Player_Explosiveness")
-player_consistency_data = load_data(league, season, "Player_Efficiency")
+player_consistency_data = load_data(league, season, "Player_Consistency")
 team_explosiveness = load_data(league, season, "Team_Explosiveness")
 opposition_explosiveness = load_data(league, season, "Opposition_Explosiveness")
-team_consistency = load_data(league, season, "Team_Efficiency")
-opposition_consistency = load_data(league, season, "Opposition_Efficiency")
+team_consistency = load_data(league, season, "Team_Consistency")
+opposition_consistency = load_data(league, season, "Opposition_Consistency")
 
 # Display Player Explosiveness data
 st.subheader('Player Explosiveness Data')
 st.dataframe(player_explosiveness_data)
 
-# Display Player Efficiency data
+# Display Player Consistency data
 st.subheader('Player Consistency Data')
 st.dataframe(player_consistency_data)
 
@@ -84,29 +84,29 @@ st.pyplot(plt.gcf())
 
 # Plot Team Consistency data
 st.subheader('Team Consistency Data')
-norm = colors.Normalize(vmin=team_consistency['Team Efficiency Index'].min(), vmax=team_consistency['Team Efficiency Index'].max())
+norm = colors.Normalize(vmin=team_consistency['Team Consistency Index'].min(), vmax=team_consistency['Team Consistency Index'].max())
 cmap = plt.cm.get_cmap("coolwarm")
-color_values = cmap(norm(team_consistency['Team Efficiency Index'].values))
+color_values = cmap(norm(team_consistency['Team Consistency Index'].values))
 
 plt.figure(figsize=(12, 8))
-plt.barh(team_consistency['Squad'], team_consistency['Team Efficiency Index'], color=color_values)
-plt.xlabel('Team Efficiency Index')
+plt.barh(team_consistency['Squad'], team_consistency['Team Consistency Index'], color=color_values)
+plt.xlabel('Team Consistency Index')
 plt.ylabel('Team')
-plt.title(f'Team Efficiency Index {league} {season}')
+plt.title(f'Team Consistency Index {league} {season}')
 plt.gca().invert_yaxis()
 st.pyplot(plt.gcf())
 
 # Plot Opposition Consistency data
 st.subheader('Opposition Consistency Data')
-norm = colors.Normalize(vmin=opposition_consistency['Team Efficiency Index'].min(), vmax=opposition_consistency['Team Efficiency Index'].max())
+norm = colors.Normalize(vmin=opposition_consistency['Team Consistency Index'].min(), vmax=opposition_consistency['Team Consistency Index'].max())
 cmap = plt.cm.get_cmap("coolwarm_r")  # Reversed colormap for the opposition data
-color_values = cmap(norm(opposition_consistency['Team Efficiency Index'].values))
+color_values = cmap(norm(opposition_consistency['Team Consistency Index'].values))
 
 plt.figure(figsize=(12, 8))
-plt.barh(opposition_consistency['Squad'], opposition_consistency['Team Efficiency Index'], color=color_values)
-plt.xlabel('Team Efficiency Index')
+plt.barh(opposition_consistency['Squad'], opposition_consistency['Team Consistency Index'], color=color_values)
+plt.xlabel('Team Consistency Index')
 plt.ylabel('Team')
-plt.title(f'Opposition Efficiency Index {league} {season}')
+plt.title(f'Opposition Consistency Index {league} {season}')
 plt.gca().invert_yaxis()
 st.pyplot(plt.gcf())
 
@@ -119,49 +119,49 @@ team_data = team_explosiveness.merge(team_consistency, on='Squad', suffixes=('_E
 # Merging data for opposition
 opposition_data = opposition_explosiveness.merge(opposition_consistency, on='Squad', suffixes=('_Explosiveness', '_Consistency'))
 
-# Plot Team Efficiency vs Consistency
+# Plot Team Explosiveness vs Consistency
 st.subheader('Team Explosiveness vs Consistency')
 plt.figure(figsize=(12, 8))
-plt.scatter(team_data['Team Explosiveness Index'], team_data['Team Efficiency Index'], c='blue')
+plt.scatter(team_data['Team Explosiveness Index'], team_data['Team Consistency Index'], c='blue')
 plt.xlabel('Team Explosiveness Index')
 plt.ylabel('Team Consistency Index')
 plt.title(f'Team Explosiveness vs Consistency {league} {season}')
 for i, team in enumerate(team_data['Squad']):
-    plt.annotate(team, (team_data['Team Explosiveness Index'][i], team_data['Team Efficiency Index'][i]), fontsize=8, alpha=0.7)
+    plt.annotate(team, (team_data['Team Explosiveness Index'][i], team_data['Team Consistency Index'][i]), fontsize=8, alpha=0.7)
 st.pyplot(plt.gcf())
 
-# Plot Opposition Efficiency vs Consistency
+# Plot Opposition Consistency vs Consistency
 st.subheader('Opposition Explosiveness vs Consistency')
 plt.figure(figsize=(12, 8))
-plt.scatter(opposition_data['Team Explosiveness Index'], opposition_data['Team Efficiency Index'], c='red')
+plt.scatter(opposition_data['Team Explosiveness Index'], opposition_data['Team Consistency Index'], c='red')
 plt.xlabel('Opposition Explosiveness Index')
-plt.ylabel('Opposition Efficiency Index')
+plt.ylabel('Opposition Consistency Index')
 plt.title(f'Opposition Explosiveness vs Consistency {league} {season}')
 for i, team in enumerate(opposition_data['Squad']):
-    plt.annotate(team, (opposition_data['Team Explosiveness Index'][i], opposition_data['Team Efficiency Index'][i]), fontsize=8, alpha=0.7)
+    plt.annotate(team, (opposition_data['Team Explosiveness Index'][i], opposition_data['Team Consistency Index'][i]), fontsize=8, alpha=0.7)
 st.pyplot(plt.gcf())
 
 
 player_explosiveness_data = load_data(league, season, "Player_Explosiveness")
-player_consistency_data = load_data(league, season, "Player_Efficiency")
+player_consistency_data = load_data(league, season, "Consistency")
 
 # Create a new variable to merge the player data for the selected season only
 selected_season_player_data = player_explosiveness_data.merge(player_consistency_data, on='Player', suffixes=('_Explosiveness', '_Consistency'))
 
 max_explosiveness = player_explosiveness_data['Explosiveness'].max() * 1.1
-max_consistency = player_consistency_data['Efficiency'].max() * 1.1
+max_consistency = player_consistency_data['Consistency'].max() * 1.1
 
 # Plot Player Explosiveness vs Consistency
 st.subheader('Player Explosiveness vs Consistency')
 plt.figure(figsize=(12, 8))
-plt.scatter(selected_season_player_data['Explosiveness'], selected_season_player_data['Efficiency'], c='purple')
+plt.scatter(selected_season_player_data['Explosiveness'], selected_season_player_data['Consistency'], c='purple')
 plt.xlabel('Player Explosiveness Index')
 plt.ylabel('Player Consistency Index')
 plt.xlim(0, max_explosiveness)
 plt.ylim(0, max_consistency)
 plt.title(f'Player Explosiveness vs Consistency {league} {season}')
 for i, player in enumerate(selected_season_player_data['Player']):
-    plt.annotate(player, (selected_season_player_data['Explosiveness'][i], selected_season_player_data['Efficiency'][i]), fontsize=8, alpha=0.7)
+    plt.annotate(player, (selected_season_player_data['Explosiveness'][i], selected_season_player_data['Consistency'][i]), fontsize=8, alpha=0.7)
 st.pyplot(plt.gcf())
  
 st.text(f'Last updated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
