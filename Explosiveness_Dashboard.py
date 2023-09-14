@@ -130,7 +130,7 @@ for i, team in enumerate(team_data['Squad']):
     plt.annotate(team, (team_data['Team Explosiveness Index'][i], team_data['Team Consistency Index'][i]), fontsize=8, alpha=0.7)
 st.pyplot(plt.gcf())
 
-# Plot Opposition Consistency vs Consistency
+# Plot Opposition Explosvieness vs Consistency
 st.subheader('Opposition Explosiveness vs Consistency')
 plt.figure(figsize=(12, 8))
 plt.scatter(opposition_data['Team Explosiveness Index'], opposition_data['Team Consistency Index'], c='red')
@@ -143,7 +143,7 @@ st.pyplot(plt.gcf())
 
 
 player_explosiveness_data = load_data(league, season, "Player_Explosiveness")
-player_consistency_data = load_data(league, season, "Consistency")
+player_consistency_data = load_data(league, season, "Player_Consistency")
 
 # Create a new variable to merge the player data for the selected season only
 selected_season_player_data = player_explosiveness_data.merge(player_consistency_data, on='Player', suffixes=('_Explosiveness', '_Consistency'))
