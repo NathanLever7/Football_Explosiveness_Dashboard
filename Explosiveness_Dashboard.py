@@ -164,7 +164,7 @@ for i, player in enumerate(selected_season_player_data['Player']):
     plt.annotate(player, (selected_season_player_data['Explosiveness'][i], selected_season_player_data['Consistency'][i]), fontsize=8, alpha=0.7)
 st.pyplot(plt.gcf())
  
-st.text(f'Last updated: 28/09/2023 15:44')
+st.text(f'Last updated: 02/11/2023 12:15')
 
 
 
